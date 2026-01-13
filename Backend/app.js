@@ -26,8 +26,10 @@ app.get('/',(req,res)=>{
 
 // routes will declare here
 import userRouter from './routes/users.route.js'
+import captainRouter from './routes/captain.route.js'
 
 
 app.use('/api/v1/users',userRouter)
+app.use('/api/v1/captain',captainRouter)
 
 export {app}
