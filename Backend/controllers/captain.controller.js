@@ -23,9 +23,11 @@ const registerCaptain=async(req,res)=>{
         
         const hashedPassword = await captainModel.hashPassword(password)
         const captain = await createCaptain({fullName, email, hashedPassword, vehicle})
+         const token = captain.generateAuthToken()
         
         return res.status(200).json({
             captain,
+            token,
             message:"captain registred successfully"
         })
         

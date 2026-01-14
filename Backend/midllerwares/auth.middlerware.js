@@ -5,13 +5,14 @@ import { captainModel } from "../models/captain.model.js";
 
 const authUser= async(req,res,next)=>{
     
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
-    
+    const token =req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
+    console.log(token)
     if(!token){
        return res.status(401).json({
             message:"Unauthorized"
         })
     }
+    console.log("auth middler me hu")
     
     const blacklistToken = await BlacklistToken.findOne({token})
     console.log("blaccklist", blacklistToken)
