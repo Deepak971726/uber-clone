@@ -4,9 +4,11 @@ import { createContext, useContext, useState } from "react";
 export const CaptainDataContext = createContext(null)
 
 export const CaptainContextProvider = ({children})=>{
-    const [captain, setCaptain]=useState()
+    const [captain, setCaptain]=useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(null)
     
-    return <CaptainDataContext.Provider value={{captain, setCaptain}}>
+    return <CaptainDataContext.Provider value={{error, setError, isLoading, setIsLoading,captain, setCaptain}}>
                 {children}
     </CaptainDataContext.Provider>
 }
