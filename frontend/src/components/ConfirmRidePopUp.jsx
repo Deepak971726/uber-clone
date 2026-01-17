@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const ConfirmRidePopUp = (props) => {
   const [otp, setOtp] = useState('')
@@ -21,14 +22,14 @@ const ConfirmRidePopUp = (props) => {
             </div>
             <div className='flex gap-2 justify-between flex-col items-center'>
                 <div className='w-full mt-5'>
-                    <div className='flex items-center gap-5 p-3 border-b-2'>
+                    <div className='flex items-center gap-5 p-3 border-gray-300 border-b-2'>
                         <i className="ri-map-pin-user-fill"></i>
                         <div>
                             <h3 className='text-lg font-medium'>562/11-A</h3>
                             <p className='text-sm -mt-1 text-gray-600'>pick up location</p>
                         </div>
                     </div>
-                    <div className='flex items-center gap-5 p-3 border-b-2'>
+                    <div className='flex items-center gap-5 p-3 border-gray-300 border-b-2'>
                         <i className="text-lg ri-map-pin-2-fill"></i>
                         <div>
                             <h3 className='text-lg font-medium'>562/11-A</h3>
@@ -48,7 +49,7 @@ const ConfirmRidePopUp = (props) => {
                     <form onSubmit={submitHander}>
                         <input value={otp} onChange={(e) => setOtp(e.target.value)} type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
 
-                        <button className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</button>
+                        <Link to='/captain-riding' className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</Link>
                         <button onClick={() => {
                             props.setConfirmRidePopUpPanel(false)
                             props.setRidePopUpPanel(false)
