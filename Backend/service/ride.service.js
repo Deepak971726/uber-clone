@@ -1,0 +1,83 @@
+import { rideModel } from "../models/ride.model.js";
+import { getDistanceTimeServise } from "./maps.service.js" 
+import crypto from 'crypto'
+
+const getFare = async(pickup, destination)=>{
+     if (!pickup || !destination) {
+        throw new Error('Pickup and destination are required');
+    }
+    
+    try {
+        
+        const distanceTime = await getDistanceTimeServise(pickup,destination)
+        console.log(distanceTime)
+        
+        if(!distanceTime){
+            throw new Error("there is somthing went wrong while generating fare")
+        }
+        const baseFare = {
+        auto: 30,
+        car: 50,
+        moto: 20
+        };
+
+        const perKmRate = {
+            auto: 10,
+            car: 15,
+            moto: 8
+        };
+
+        const perMinuteRate = {
+            auto: 2,
+            car: 3,
+            moto: 1.5
+        };
+        
+        const distanceMeter  = distanceTime.distance.value
+        const second = distanceTime.duration.value
+        
+        const fare = {
+            auto: Math.round(baseFare.auto + ((distanceMeter / 1000) * perKmRate.auto) + ((second / 60) * perMinuteRate.auto)),
+            car: Math.round(baseFare.car + ((distanceMeter / 1000) * perKmRate.car) + ((second / 60) * perMinuteRate.car)),
+            moto: Math.round(baseFare.moto + ((distanceMeter / 1000) * perKmRate.moto) + ((second / 60) * perMinuteRate.moto))
+        };
+
+    return fare;
+        
+    } catch (error) {
+        
+    }
+    
+}
+
+function getOtp(num) {
+    
+        const otp = crypto.randomInt(Math.pow(10, num - 1), Math.pow(10, num)).toString();
+        return otp;
+     
+}
+
+
+const createRideService = async({user, pickup, destination, vehicleType})=>{
+    
+    if(!user || !pickup || !destination || !vehicleType){
+        throw new Error("all fields are required")
+    }
+    
+     const fare = await getFare(pickup, destination);
+    
+    // console.log(distanceTime)
+     const ride = await rideModel.create({
+        user,
+        pickup,
+        destination,
+        otp: getOtp(6),
+        fare: fare[ vehicleType ]
+    })
+
+    return ride;
+    
+    
+}
+
+export {createRideService, getFare}
