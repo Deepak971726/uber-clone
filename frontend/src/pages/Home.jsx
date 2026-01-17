@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {useGSAP} from '@gsap/react'
 import gsap from 'gsap'
 import 'remixicon/fonts/remixicon.css'
@@ -6,6 +6,7 @@ import LocationSearchPanel from '../components/LocationSearchPanel'
 import VehiclePanel from '../components/VehiclePanel'
 import ConfirmRide from '../components/ConfirmRide'
 import LookingForDriver from '../components/LookingForDriver'
+import WaitingForDriver from '../components/WaitingForDriver'
 
 const Home = () => {
   
@@ -14,13 +15,15 @@ const Home = () => {
   const [panelOpen, setPanelOpen] = useState(false)
   const [vehiclePanel, setVehiclePanel] = useState(false)
   const [confirmRidePanel,setConfirmRidePanel] = useState(false)
-  const [VehicleFound, setVehicleFound] = useState(null)
+  const [VehicleFound, setVehicleFound] = useState(false)
+  const [waitingForDriver, setWaitingForDriver] = useState(false)
    
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
   const vehiclePanelRef = useRef(null)
   const confirmRidePanelRef = useRef(null)
   const vehicleFoundRef = useRef(null)
+  const waitingForDriverRef = useRef(null)
   
   
   
@@ -97,6 +100,19 @@ const Home = () => {
     }
     
   },[VehicleFound])
+  useGSAP(function(){
+    // console.log("me bhi chal rha hiu")
+    if (waitingForDriver) {
+        gsap.to(waitingForDriverRef.current, {
+            transform: 'translateY(0)'
+        })
+    } else {
+        gsap.to(waitingForDriverRef.current, {
+            transform: 'translateY(100%)'
+        })
+    }
+    
+  },[waitingForDriver])
   
   
      
@@ -150,6 +166,9 @@ const Home = () => {
       </div>
       <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-1'>
         <LookingForDriver setVehicleFound={setVehicleFound}/>
+      </div>
+      <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0  translate-y-full bg-white px-3 py-6 pt-1'>
+        <WaitingForDriver setWaitingForDriver = {setWaitingForDriver} />
       </div>
       
     </div>
