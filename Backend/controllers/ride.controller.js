@@ -1,5 +1,5 @@
 import {validationResult} from 'express-validator'
-import { createRideService } from '../service/ride.service.js';
+import { createRideService, getFareService } from '../service/ride.service.js';
  
  const createRide = async(req,res)=>{
     const errors = validationResult(req);
@@ -35,4 +35,44 @@ import { createRideService } from '../service/ride.service.js';
  }
  
  
- export {createRide}
+ const getFare=async(req,res)=>{
+     const errors = validationResult(req);
+     console.log(errors)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    // console.log("running..........")
+    // console.log(req.body)
+    
+    const {pickup, destination} = req.query
+    // console.log(pickup, destination, vehicleType)
+    try {
+        
+        if(!pickup || !destination){
+            return res.status(400).json({ 
+                message:"all fields are required"
+            });
+        }
+        
+        const fare = await getFareService(pickup, destination)
+        // console.log("fare............",fare)
+        if(!fare){
+            return res.status(401).json({
+                message:"fare does not calculated"
+            })
+        }
+        
+        return res.status(200).json({
+           fare,
+            message:"fare calculated successfully!!!"
+        })
+        
+        
+    } catch (error) {
+        
+    }
+    
+ }
+
+ 
+ export {createRide, getFare}

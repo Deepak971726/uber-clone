@@ -1,6 +1,6 @@
 import React from 'react'
 
-const VehiclePanel = ({setVehiclePanel, setConfirmRidePanel}) => {
+const VehiclePanel = ({setVehicleType ,fare, setVehiclePanel, setConfirmRidePanel}) => {
     // const onClickHandler=()=>{
         
     
@@ -13,6 +13,7 @@ const VehiclePanel = ({setVehiclePanel, setConfirmRidePanel}) => {
             <div onClick={()=>{
                 setConfirmRidePanel(true)
                 setVehiclePanel(false)
+                setVehicleType('car')
             }} className='flex border-2 border-transparent active:border-black bg-gray-200 rounded-2xl mb-2 w-full p-3 items-center justify-between'>
             <img className='h-18' src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=552/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8zMDUxZTYwMi0xMGJiLTRlNjUtYjEyMi1lMzk0ZDgwYTljNDcucG5n" alt="" />
             <div className='w-1/2'>
@@ -20,11 +21,12 @@ const VehiclePanel = ({setVehiclePanel, setConfirmRidePanel}) => {
                 <h5 className='font-medium text-sm'>2 mins away</h5>
                 <p className='font-normal text-xs text-gray-600'>Affordable, compact riders</p>
             </div>
-            <h2 className='text-lg font-semibold'>₹129.20</h2>
+            <h2 className='text-lg font-semibold'>₹{fare?.car}</h2>
             </div>
             <div onClick={()=>{
                 setConfirmRidePanel(true)
                 setVehiclePanel(false)
+                 setVehicleType('moto')
             }} className='flex border-2 border-transparent active:border-black rounded-2xl mb-2 bg-gray-200 w-full p-3 items-center justify-between'>
             <img className='h-12' src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yYzdmYTE5NC1jOTU0LTQ5YjItOWM2ZC1hM2I4NjAxMzcwZjUucG5n" alt="" />
             <div className='w-1/2'>
@@ -32,11 +34,12 @@ const VehiclePanel = ({setVehiclePanel, setConfirmRidePanel}) => {
                 <h5 className='font-medium text-sm'>3 mins away</h5>
                 <p className='font-normal text-xs text-gray-600'>Affordable motorcycle rides</p>
             </div>
-            <h2 className='text-lg font-semibold'>₹92.20</h2>
+            <h2 className='text-lg font-semibold'>₹{fare?.moto}</h2>
             </div>
             <div onClick={()=>{
                 setConfirmRidePanel(true)
                 setVehiclePanel(false)
+                 setVehicleType('auto')
             }}     className='flex border-2 border-transparent active:border-black rounded-2xl mb-2 w-full bg-gray-200  p-3 items-center justify-between'>
             <img className='h-12' src='https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=1152/height=768/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8xZGRiOGM1Ni0wMjA0LTRjZTQtODFjZS01NmExMWEwN2ZlOTgucG5n' alt="" />
             <div className='w-1/2'>
@@ -44,7 +47,7 @@ const VehiclePanel = ({setVehiclePanel, setConfirmRidePanel}) => {
                 <h5 className='font-medium text-sm'>2 mins away</h5>
                 <p className='font-normal text-xs text-gray-600'>Affordable, compact riders</p>
             </div>
-            <h2 className='text-lg font-semibold'>₹179.20</h2>
+            <h2 className='text-lg font-semibold'>₹{fare?.auto}</h2>
             </div>
         </div>
     )

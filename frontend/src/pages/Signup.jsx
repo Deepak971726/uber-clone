@@ -20,8 +20,9 @@ const Signup = () => {
        email,
        password
     }
-    const res = await axios.post('http://localhost:4000/api/v1/users/register',data);
-    // setUser({firstName,lastName,email,password})
+    const res = await axios.post('http://localhost:5000/api/v1/users/register',data);
+    setUser({firstName,lastName,email,password})
+    console.log(res)
     console.log(res.status)
     if(res.status === 200){
       setUser(res.data.user)

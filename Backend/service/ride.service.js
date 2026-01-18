@@ -2,7 +2,7 @@ import { rideModel } from "../models/ride.model.js";
 import { getDistanceTimeServise } from "./maps.service.js" 
 import crypto from 'crypto'
 
-const getFare = async(pickup, destination)=>{
+const getFareService = async(pickup, destination)=>{
      if (!pickup || !destination) {
         throw new Error('Pickup and destination are required');
     }
@@ -10,7 +10,7 @@ const getFare = async(pickup, destination)=>{
     try {
         
         const distanceTime = await getDistanceTimeServise(pickup,destination)
-        console.log(distanceTime)
+        // console.log(distanceTime)
         
         if(!distanceTime){
             throw new Error("there is somthing went wrong while generating fare")
@@ -20,6 +20,7 @@ const getFare = async(pickup, destination)=>{
         car: 50,
         moto: 20
         };
+        
 
         const perKmRate = {
             auto: 10,
@@ -45,7 +46,8 @@ const getFare = async(pickup, destination)=>{
     return fare;
         
     } catch (error) {
-        
+        console.log(error)
+        throw new Error("something went wrong while calculating the fare")
     }
     
 }
@@ -60,24 +62,30 @@ function getOtp(num) {
 
 const createRideService = async({user, pickup, destination, vehicleType})=>{
     
-    if(!user || !pickup || !destination || !vehicleType){
-        throw new Error("all fields are required")
-    }
-    
-     const fare = await getFare(pickup, destination);
-    
-    // console.log(distanceTime)
-     const ride = await rideModel.create({
-        user,
-        pickup,
-        destination,
-        otp: getOtp(6),
-        fare: fare[ vehicleType ]
-    })
-
-    return ride;
+   try {
+     if(!user || !pickup || !destination || !vehicleType){
+         throw new Error("all fields are required")
+     }
+     
+      const fare = await getFareService(pickup, destination);
+     
+     // console.log(distanceTime)
+      const ride = await rideModel.create({
+         user,
+         pickup,
+         destination,
+         otp: getOtp(6),
+         fare: fare[vehicleType]
+     })
+     
+ 
+     return ride;
+   } catch (error) {
+        console.log(error)
+        throw new Error("something went wrong while creating the ride")
+   }
     
     
 }
 
-export {createRideService, getFare}
+export {createRideService, getFareService}
