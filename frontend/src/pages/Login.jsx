@@ -19,7 +19,7 @@ const Login = () => {
       }
     const res = await axios.post('http://localhost:5000/api/v1/users/login',data)
     // console.log(res.status)
-    console.log("response le login se hu")
+    // console.log("response le login se hu")
     
     if(res.status===200){
       console.log(res.data.user)

@@ -10,7 +10,7 @@ const socket = io('http://localhost:5000')
 export const SocketContextProvider = ({children})=>{
     
     useEffect(()=>{
-        socket.on('connection',()=>{
+        socket.on('connect',()=>{
             console.log("connect to socket server")
         })
         

@@ -20,9 +20,10 @@ const initializeSocket=(server)=>{
                 })
             }
             else if(userType==='captain'){
-                await captainModel.findByIdAndUpdate(userId,{
+               const cap = await captainModel.findByIdAndUpdate(userId,{
                     socketId:socket.id
                 })
+                // console.log("intialia connection of captain socket",cap)
             }
         })
         
@@ -47,8 +48,9 @@ const initializeSocket=(server)=>{
 }
 
 const sendMessageToSocketId = (socketId, messageObject)=>{
-    console.log(messageObject)
     if(io){
+        console.log("me cha hu this send message socket")
+    console.log(messageObject)
         io.to(socketId).emit(messageObject.event, messageObject.data)
         
     }

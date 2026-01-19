@@ -52,7 +52,7 @@ const loginUser = async (req,res)=>{
     const {email, password} = req.body
      const errors = validationResult(req);
      
-     console.log("me ccha rha hu")
+    //  console.log("me ccha rha hu")
 
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -69,7 +69,7 @@ const loginUser = async (req,res)=>{
                 message:"user doesn't existed"
             })
         }
-        console.log(user.password)
+        // console.log(user.password)
         const isValidPassword = await user.comparePassword(password)
         if(!isValidPassword){
             return res.status(401).json({

@@ -95,7 +95,7 @@ const getCaptainInTheRadius = async(ltd, lng, radius)=>{
         throw new Error("all fileds are required from getCaptainsInTheRadius")
     }
     // radius in KM
-    console.log("if there is any other value then choose that")
+    // console.log("if there is any other value then choose that")
      const captains = await captainModel.find({
         location: {
             $geoWithin: {
@@ -103,6 +103,7 @@ const getCaptainInTheRadius = async(ltd, lng, radius)=>{
             }
         }
     });
+    console.log("captain saare yeh hai",captains)
 
     return captains;
 }

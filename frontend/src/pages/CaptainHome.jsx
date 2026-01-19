@@ -7,6 +7,7 @@ import RidePopUp from '../components/RidePopup'
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { useSocket } from '../context/SocketContext'
 import { useCaptainData } from '../context/CaptainContext'
+import axios from 'axios'
 
 const CaptainHome = () => {
   
@@ -21,12 +22,12 @@ const CaptainHome = () => {
   
   
   useEffect(()=>{
-      // console.log("use Effect use hu ::",user.user)
+    //   console.log("use Effect use hu ::",captain.captain._id)
       socket.emit('join',{
         userType:"captain",
-        userId: captain._id
+        userId: captain.captain._id
       })
-        //  console.log("captian",captain)
+        //  console.log("captian soket connextion ho gya hai")
          
           const updateLocation = () => {
             if (navigator.geolocation) {
@@ -38,7 +39,7 @@ const CaptainHome = () => {
                     //     }
                     // })
                     socket.emit('update-location-captain', {
-                        userId: captain._id,
+                        userId: captain.captain._id,
                         location: {
                             ltd: position.coords.latitude,
                             lng: position.coords.longitude
@@ -57,12 +58,33 @@ const CaptainHome = () => {
     
     
     socket.on('new-ride',(data)=>{
+        // console.log("new-ride frontend me char rha hai")
         setRidePopUpPanel(true)
-        console.log(data)
+        // console.log(data)
         setRide(data)
         
     })
     
+    
+     const confirmRide=async()=> {
+
+        const response = await axios.post('http://localhost:5000/api/v1/ride/confirm-ride', {
+
+            rideId: ride._id,
+            captainId: captain._id,
+
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        console.log(response)
+
+        setRidePopUpPanel(false)
+        setConfirmRidePopUpPanel(true)
+
+    }
+
   
   useGSAP(function(){
     // console.log("me bhi chal rha hiu")
@@ -109,7 +131,7 @@ const CaptainHome = () => {
               <CaptainDetails/>
           </div>
            <div ref={ridePopUpPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
-                <RidePopUp setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>
+                <RidePopUp confirmRide={confirmRide} ride={ride} setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>
           </div>
            <div ref={confirmRidePopUpPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
                 <ConfirmRidePopUp setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>

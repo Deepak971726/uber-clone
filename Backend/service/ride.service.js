@@ -68,7 +68,7 @@ const createRideService = async({user, pickup, destination, vehicleType})=>{
      }
      
       const fare = await getFareService(pickup, destination);
-      
+      const distanceTime = await getDistanceTimeServise(pickup,destination)
       
       
      
@@ -78,7 +78,8 @@ const createRideService = async({user, pickup, destination, vehicleType})=>{
          pickup,
          destination,
          otp: getOtp(6),
-         fare: fare[vehicleType]
+         fare: fare[vehicleType],
+         distance: distanceTime.distance.value/1000
      })
      
  
@@ -91,4 +92,34 @@ const createRideService = async({user, pickup, destination, vehicleType})=>{
     
 }
 
-export {createRideService, getFareService}
+const confirmRideServie = async({rideId, captain})=>{
+    
+    if(!rideId || !captain){
+          throw new Error("all fields are required")
+    }
+    
+    try {
+        
+        await rideModel.findOneAndUpdate({_id:rideId},{
+            status:"accepted",
+            captain:captain._id
+        }) 
+        
+          const ride = await rideModel.findOne({
+            _id: rideId
+        }).populate('user').populate('captain').select('+otp');
+            
+        
+        if(!ride){
+            throw new Error("ride not found")
+        }
+        
+        return ride
+        
+    } catch (error) {
+         console.log(error)
+        throw new Error("something went wrong while confirming the ride")
+    }
+}
+
+export {createRideService, getFareService, confirmRideServie}

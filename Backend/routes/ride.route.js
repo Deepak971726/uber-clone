@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import {body, query} from 'express-validator' 
-import {authUser} from '../midllerwares/auth.middlerware.js'
-import { createRide, getFare } from '../controllers/ride.controller.js'
+import {authCaptain, authUser} from '../midllerwares/auth.middlerware.js'
+import { confirmRide, createRide, getFare } from '../controllers/ride.controller.js'
 
 
 
@@ -20,6 +20,11 @@ router.get('/get-fare',
     query('destination').isString().isLength({ min: 3 }).withMessage('Invalid destination address'),
     authUser,
     getFare
+)
+
+router.post('/confirm-ride',authCaptain,
+    body('rideId').isMongoId().withMessage('Invalid ride id'),
+    confirmRide
 )
 
 
