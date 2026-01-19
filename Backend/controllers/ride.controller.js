@@ -1,5 +1,8 @@
 import {validationResult} from 'express-validator'
 import { createRideService, getFareService } from '../service/ride.service.js';
+import { getAddressCoordinate, getCaptainInTheRadius } from '../service/maps.service.js';
+import { sendMessageToSocketId } from '../socket.js';
+import { rideModel } from '../models/ride.model.js';
  
  const createRide = async(req,res)=>{
     const errors = validationResult(req);
@@ -13,7 +16,7 @@ import { createRideService, getFareService } from '../service/ride.service.js';
         
         // console.log("me chaaaasjdfjdsfjk")
         const ride = await createRideService({ user: req.user._id, pickup, destination, vehicleType });
-        console.log(ride)
+        // console.log(ride)
         
         if(!ride){
             return res.status(501).json({
@@ -22,15 +25,32 @@ import { createRideService, getFareService } from '../service/ride.service.js';
         }
         
         
-        return res.status(201).json({
+        res.status(200).json({
             ride,
             message:"ride created successfully"
         });
         
+        const pickupCoordinates = await getAddressCoordinate(pickup)
+        console.log("object",pickupCoordinates)
+        const captainsInRadius = await getCaptainInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng,2)
+        // console.log("captainradius",captainsInRadius)
+        ride.otp=""
+        const rideWithUser = await rideModel.findOne({ _id: ride._id }).populate('user');
+        
+        // console.log(pickupCoordinates)
+        captainsInRadius.map(captain => {
+
+            sendMessageToSocketId(captain.socketId, {
+                event: 'new-ride',
+                data: rideWithUser
+            })
+
+        })
+        
         
     } catch (error) {
-        console.log(err);
-        return res.status(500).json({ message: err.message });
+        console.log(error);
+        return res.status(500).json({ message: error.message });
     }
  }
  

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { captainModel } from '../models/captain.model.js'
 const getAddressCoordinate =async(address)=>{
     try {
         // console.log("me toh chal rha hu")
@@ -21,8 +22,8 @@ const getAddressCoordinate =async(address)=>{
         }
         
         return {
-            latitude:location.lat,
-            longitude:location.lng
+            ltd:location.lat,
+            lng:location.lng
         }
         
     } catch (error) {
@@ -88,7 +89,24 @@ const getAutoCompleteSuggestions =async(input)=>{
     }
 }
 
+const getCaptainInTheRadius = async(ltd, lng, radius)=>{
+    
+    if(!ltd || !lng || !radius){
+        throw new Error("all fileds are required from getCaptainsInTheRadius")
+    }
+    // radius in KM
+    console.log("if there is any other value then choose that")
+     const captains = await captainModel.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [ [ ltd, lng ], radius / 6371 ]
+            }
+        }
+    });
+
+    return captains;
+}
 
 
 
-export {getAddressCoordinate ,getDistanceTimeServise, getAutoCompleteSuggestions}
+export {getAddressCoordinate ,getDistanceTimeServise, getAutoCompleteSuggestions, getCaptainInTheRadius}

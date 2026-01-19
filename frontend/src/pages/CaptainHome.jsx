@@ -10,8 +10,9 @@ import { useCaptainData } from '../context/CaptainContext'
 
 const CaptainHome = () => {
   
-  const [ridePopUpPanel, setRidePopUpPanel] = useState(true)
+  const [ridePopUpPanel, setRidePopUpPanel] = useState(false)
   const [confirmRidePopUpPanel, setConfirmRidePopUpPanel]= useState(false)
+  const [ride, setRide] = useState(null)
   
   const ridePopUpPanelRef = useRef(null)
   const confirmRidePopUpPanelRef= useRef(null)
@@ -25,12 +26,17 @@ const CaptainHome = () => {
         userType:"captain",
         userId: captain._id
       })
-         console.log("captian",captain)
+        //  console.log("captian",captain)
          
           const updateLocation = () => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
-
+                    // console.log({userId: captain._id,
+                    //     location: {
+                    //         ltd: position.coords.latitude,
+                    //         lng: position.coords.longitude
+                    //     }
+                    // })
                     socket.emit('update-location-captain', {
                         userId: captain._id,
                         location: {
@@ -46,6 +52,16 @@ const CaptainHome = () => {
         updateLocation()
     //   console.log(socket.id)
     },[captain])
+    
+    
+    
+    
+    socket.on('new-ride',(data)=>{
+        setRidePopUpPanel(true)
+        console.log(data)
+        setRide(data)
+        
+    })
     
   
   useGSAP(function(){
@@ -92,7 +108,7 @@ const CaptainHome = () => {
               {/* <CaptainDetials /> */}
               <CaptainDetails/>
           </div>
-           <div ref={ridePopUpPanelRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-12'>
+           <div ref={ridePopUpPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
                 <RidePopUp setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>
           </div>
            <div ref={confirmRidePopUpPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
