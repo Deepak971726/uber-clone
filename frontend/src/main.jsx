@@ -4,13 +4,16 @@ import './index.css'
 import App from './App.jsx'
 import { UserContextProvider } from './context/UserContext.jsx'
 import { CaptainContextProvider } from './context/CaptainContext.jsx'
+import { SocketContextProvider } from './context/SocketContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <CaptainContextProvider>
     <UserContextProvider>
+    <CaptainContextProvider>
+      <SocketContextProvider>
         <App />
-    </UserContextProvider>
+    </SocketContextProvider>
     </CaptainContextProvider>
-  </StrictMode>,
+    </UserContextProvider>
+  </StrictMode>
 )

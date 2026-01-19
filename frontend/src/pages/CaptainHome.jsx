@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import CaptainDetails from '../components/CaptainDetails'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import RidePopUp from '../components/RidePopup'
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
+import { useSocket } from '../context/SocketContext'
+import { useCaptainData } from '../context/CaptainContext'
 
 const CaptainHome = () => {
   
@@ -13,6 +15,38 @@ const CaptainHome = () => {
   
   const ridePopUpPanelRef = useRef(null)
   const confirmRidePopUpPanelRef= useRef(null)
+  const {socket} = useSocket()
+  const {captain} = useCaptainData()
+  
+  
+  useEffect(()=>{
+      // console.log("use Effect use hu ::",user.user)
+      socket.emit('join',{
+        userType:"captain",
+        userId: captain._id
+      })
+         console.log("captian",captain)
+         
+          const updateLocation = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+
+                    socket.emit('update-location-captain', {
+                        userId: captain._id,
+                        location: {
+                            ltd: position.coords.latitude,
+                            lng: position.coords.longitude
+                        }
+                    })
+                })
+            }
+        }
+
+        setInterval(updateLocation, 10000)
+        updateLocation()
+    //   console.log(socket.id)
+    },[captain])
+    
   
   useGSAP(function(){
     // console.log("me bhi chal rha hiu")

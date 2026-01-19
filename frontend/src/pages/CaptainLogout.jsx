@@ -11,7 +11,7 @@ const CaptainLogout = () => {
     //     console.log(token)
     // },[])
     
-    axios.post('http://localhost:4000/api/v1/captain/logout',{},{
+    axios.post('http://localhost:5000/api/v1/captain/logout',{},{
         headers: {
             Authorization: `Bearer ${token}`
         }

@@ -19,10 +19,12 @@ const Login = () => {
       }
     const res = await axios.post('http://localhost:5000/api/v1/users/login',data)
     // console.log(res.status)
-    // console.log(res)
+    console.log("response le login se hu")
     
     if(res.status===200){
+      console.log(res.data.user)
       setUser(res.data.user)
+      
       localStorage.setItem('token',res.data.token)
       navigate('/home')
     }

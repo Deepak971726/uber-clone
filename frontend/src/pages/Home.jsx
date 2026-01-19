@@ -9,6 +9,8 @@ import LookingForDriver from '../components/LookingForDriver'
 import WaitingForDriver from '../components/WaitingForDriver'
 import axios from 'axios'
 import { Await } from 'react-router-dom'
+import { useUserData } from '../context/UserContext'
+import { useSocket } from '../context/SocketContext'
 
 const Home = () => {
   
@@ -22,7 +24,7 @@ const Home = () => {
   const [locationSearchData, setLocationSearchData] = useState(null)
   const [isPickupLocation, setIsPickupLocation] = useState(true)
   const [fare, setFare] = useState(null)
-  const [vehicleType, setVehicleType] = useState("car")
+  const [vehicleType, setVehicleType] = useState("")
    
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
@@ -30,12 +32,27 @@ const Home = () => {
   const confirmRidePanelRef = useRef(null)
   const vehicleFoundRef = useRef(null)
   const waitingForDriverRef = useRef(null)
+  const {user} = useUserData()
+  const {socket} = useSocket()
+  
+  useEffect(()=>{
+    // console.log("use Effect use hu ::",user.user)
+    socket.emit('join',{
+      userType:"user",
+      userId: user.user._id
+    })
+    // console.log(socket.id)
+    
+    
+    
+  },[user])
+  
   
   
   
   const submitHandler=(e)=>{
     e.preventDefault()
-    console.log(pickup,destination)
+    // console.log(pickup,destination)
   }
   
   const getLocationsSuggestions = async()=>{
@@ -50,7 +67,7 @@ const Home = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
     })
-    console.log(res.data.data)
+    // console.log(res.data.data)
     setLocationSearchData(res.data.data)
   }
   
@@ -198,7 +215,11 @@ const Home = () => {
               placeholder='Enter your destination' />
           </form>
            <button
-              onClick={findTrip}
+              onClick={()=>{
+                findTrip()
+                // setDestination("")
+                // setPickup("")
+                }}
               className='bg-black text-white px-4 py-2 rounded-lg mt-3 w-full'>
               Find Trip
           </button>
@@ -220,7 +241,7 @@ const Home = () => {
         <ConfirmRide vehicleType={vehicleType} pickup={pickup} destination={destination} fare={fare} setVehicleFound={setVehicleFound} confirmRidePanel={confirmRidePanel} setConfirmRidePanel={setConfirmRidePanel}/>
       </div>
       <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-1'>
-        <LookingForDriver setVehicleFound={setVehicleFound}/>
+        <LookingForDriver vehicleType={vehicleType} destination={destination} pickup={pickup} fare={fare} setVehicleFound={setVehicleFound}/>
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0  translate-y-full bg-white px-3 py-6 pt-1'>
         <WaitingForDriver setWaitingForDriver = {setWaitingForDriver} />

@@ -22,13 +22,13 @@ const Signup = () => {
     }
     const res = await axios.post('http://localhost:5000/api/v1/users/register',data);
     setUser({firstName,lastName,email,password})
-    console.log(res)
-    console.log(res.status)
+    // console.log(res)
+    // console.log(res.status)
     if(res.status === 200){
       setUser(res.data.user)
       localStorage.setItem('token',res.data.token)
       navigate('/home')
-      console.log(res.data.token)
+      // console.log(res.data.token)
       
     }
     setEmail('')

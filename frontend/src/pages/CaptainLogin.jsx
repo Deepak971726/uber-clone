@@ -17,7 +17,7 @@ const CaptainLogin = () => {
       email,
       password
     }
-    const res = await axios.post('http://localhost:4000/api/v1/captain/login',data)
+    const res = await axios.post('http://localhost:5000/api/v1/captain/login',data)
     // console.log(res.data)
     if(res.status===200){
       
