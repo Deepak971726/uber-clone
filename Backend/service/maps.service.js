@@ -15,7 +15,7 @@ const getAddressCoordinate =async(address)=>{
             throw new Error("Unable to fetch location from google map API")
         }
         const location = res.data.results[0].geometry.location
-        console.log("locaiton hai jo api se aaya hai",location)
+        // console.log("locaiton hai jo api se aaya hai",location)
         
         if(!location){
             throw new Error("address in not valid")
@@ -103,7 +103,7 @@ const getCaptainInTheRadius = async(ltd, lng, radius)=>{
             }
         }
     });
-    console.log("captain saare yeh hai",captains)
+    // console.log("captain saare yeh hai",captains)
 
     return captains;
 }

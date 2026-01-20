@@ -8,7 +8,7 @@ import ConfirmRide from '../components/ConfirmRide'
 import LookingForDriver from '../components/LookingForDriver'
 import WaitingForDriver from '../components/WaitingForDriver'
 import axios from 'axios'
-import { Await } from 'react-router-dom'
+import { Await, useNavigate } from 'react-router-dom'
 import { useUserData } from '../context/UserContext'
 import { useSocket } from '../context/SocketContext'
 
@@ -25,7 +25,9 @@ const Home = () => {
   const [isPickupLocation, setIsPickupLocation] = useState(true)
   const [fare, setFare] = useState(null)
   const [vehicleType, setVehicleType] = useState("")
-  const [confirmRideData, setConfirmRideData] = useState(null)
+  // const [confirmRideData, setConfirmRideData] = useState(null)
+  const [ride, setRide] = useState(null)
+  const navigate = useNavigate()
   
    
   const panelRef = useRef(null)
@@ -53,8 +55,21 @@ const Home = () => {
     setVehicleFound(false)
     // setConfirmRidePanel(true)
     setWaitingForDriver(true)
-    setConfirmRideData(data)
+    // setConfirmRideData(data)
+    setRide(data)
     console.log("socket data::::",data)
+  },[])
+  
+  
+  socket.on('ride-started',(data)=>{
+    // setVehicleFound(false)
+    // setConfirmRidePanel(true)
+    // setWaitingForDriver(true)
+    // setConfirmRideData(data)
+    // setRide(data)
+    console.log("ride started data::::",data)
+    // navigate = useNavigate()
+    navigate('/riding')
   },[])
   
   
@@ -197,6 +212,7 @@ const Home = () => {
             }
         })
         
+        
         console.log(response)
   }
   
@@ -269,7 +285,7 @@ const Home = () => {
         <LookingForDriver vehicleType={vehicleType} destination={destination} pickup={pickup} fare={fare} setVehicleFound={setVehicleFound}/>
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0  translate-y-full bg-white px-3 py-6 pt-1'>
-        <WaitingForDriver setWaitingForDriver = {setWaitingForDriver} />
+        <WaitingForDriver ride = {ride} />
       </div>
       
     </div>

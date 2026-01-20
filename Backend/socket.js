@@ -49,6 +49,7 @@ const initializeSocket=(server)=>{
 
 const sendMessageToSocketId = (socketId, messageObject)=>{
     if(io){
+        console.log(socketId)
         console.log("me cha hu this send message socket")
     console.log(messageObject)
         io.to(socketId).emit(messageObject.event, messageObject.data)

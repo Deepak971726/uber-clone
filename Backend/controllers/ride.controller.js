@@ -1,8 +1,9 @@
 import {validationResult} from 'express-validator'
-import { confirmRideServie, createRideService, getFareService } from '../service/ride.service.js';
+import { confirmRideServie, createRideService, getFareService, startRideService } from '../service/ride.service.js';
 import { getAddressCoordinate, getCaptainInTheRadius } from '../service/maps.service.js';
 import { sendMessageToSocketId } from '../socket.js';
 import { rideModel } from '../models/ride.model.js';
+import { Socket } from 'socket.io';
  
  const createRide = async(req,res)=>{
     const errors = validationResult(req);
@@ -39,7 +40,7 @@ import { rideModel } from '../models/ride.model.js';
         
         // console.log(pickupCoordinates)
         captainsInRadius.map(captainsss => {
-
+                console.log("ek captain ko gya hai", captainsss)
             sendMessageToSocketId(captainsss.socketId, {
                 event: 'new-ride',
                 data: rideWithUser
@@ -103,7 +104,7 @@ import { rideModel } from '../models/ride.model.js';
         return res.status(400).json({ errors: errors.array() });
     }
      const { rideId } = req.body;
-     console.log(rideId)
+    //  console.log(rideId)
     try {
         
         // console.log("me toh chal rhai")
@@ -133,5 +134,43 @@ import { rideModel } from '../models/ride.model.js';
     
  }
 
+const startRide = async(req,res)=>{
+     const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    
+    
+    try {
+        
+        const {rideId, userId, otp} = req.query
+        console.log(rideId,userId,otp)
+        
+        const ride = await startRideService({rideId, userId, otp, captain:req.captain})
+        console.log(ride)
+        
+        if(!ride){
+            return res.status(401).json({
+                message:"find not started"
+            })
+        }
+        
+        res.status(200).json({
+            ride,
+            message:"ride stared successfully !!"
+        })
+        
+         sendMessageToSocketId(ride.user.socketId, {
+            event: 'ride-started',
+            data: ride
+        })
+        
+        
+    } catch (error) {
+        console.log(err);
+        return res.status(500).json({ message: err.message });
+    
+    }
+}
  
- export {createRide, getFare, confirmRide}
+ export {createRide, getFare, confirmRide, startRide}

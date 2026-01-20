@@ -14,6 +14,8 @@ const CaptainHome = () => {
   const [ridePopUpPanel, setRidePopUpPanel] = useState(false)
   const [confirmRidePopUpPanel, setConfirmRidePopUpPanel]= useState(false)
   const [ride, setRide] = useState(null)
+  const [confirmRideData, setConfirmRideData] = useState(null)
+  
   
   const ridePopUpPanelRef = useRef(null)
   const confirmRidePopUpPanelRef= useRef(null)
@@ -60,7 +62,7 @@ const CaptainHome = () => {
     socket.on('new-ride',(data)=>{
         // console.log("new-ride frontend me char rha hai")
         setRidePopUpPanel(true)
-        // console.log(data)
+        console.log(data)
         setRide(data)
         
     })
@@ -68,7 +70,7 @@ const CaptainHome = () => {
     
      const confirmRide=async()=> {
 
-        const response = await axios.post('http://localhost:5000/api/v1/ride/confirm-ride', {
+        const res = await axios.post('http://localhost:5000/api/v1/ride/confirm-ride', {
 
             rideId: ride._id,
             captainId: captain._id,
@@ -78,7 +80,8 @@ const CaptainHome = () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-        console.log(response)
+        console.log("confirm ride ",res)
+        setConfirmRideData(res.data.ride)
 
         setRidePopUpPanel(false)
         setConfirmRidePopUpPanel(true)
@@ -134,7 +137,7 @@ const CaptainHome = () => {
                 <RidePopUp confirmRide={confirmRide} ride={ride} setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>
           </div>
            <div ref={confirmRidePopUpPanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
-                <ConfirmRidePopUp setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>
+                <ConfirmRidePopUp confirmRideData={confirmRideData} setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>
           </div>
     </div>
   )
