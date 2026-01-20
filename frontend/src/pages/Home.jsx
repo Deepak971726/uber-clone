@@ -90,7 +90,7 @@ const Home = () => {
     
     const data = isPickupLocation?pickup:destination
     
-    const res = await axios.get('http://localhost:5000/api/v1/maps/get-suggestions',{
+    const res = await axios.get(`${import.meta.VITE_SERVER_URI}/maps/get-suggestions`,{
       params:{
         input:data
       },
@@ -110,7 +110,7 @@ const Home = () => {
   const findTrip=async()=>{
     setVehiclePanel(true)
     setPanelOpen(false)
-     const res = await axios.get('http://localhost:5000/api/v1/ride/get-fare',{
+     const res = await axios.get(`${import.meta.VITE_SERVER_URI}/ride/get-fare`,{
       params:{
         pickup:pickup,
         destination:destination
@@ -208,7 +208,7 @@ const Home = () => {
   
   
   const createRide=async()=>{
-     const response = await axios.post('http://localhost:5000/api/v1/ride/create', {
+     const response = await axios.post(`${import.meta.VITE_SERVER_URI}/ride/create`, {
             pickup,
             destination,
             vehicleType

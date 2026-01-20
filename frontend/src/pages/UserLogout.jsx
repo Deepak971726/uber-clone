@@ -10,7 +10,7 @@ const UserLogout = () => {
     //     console.log(token)
     // },[])
     
-    axios.post('http://localhost:5000/api/v1/users/logout',{},{
+    axios.post(`${import.meta.VITE_SERVER_URI}/users/logout`,{},{
         headers: {
             Authorization: `Bearer ${token}`
         }

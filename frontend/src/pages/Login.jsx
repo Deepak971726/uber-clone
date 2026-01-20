@@ -17,7 +17,7 @@ const Login = () => {
        email,
        password
       }
-    const res = await axios.post('http://localhost:5000/api/v1/users/login',data)
+    const res = await axios.post(`${import.meta.VITE_SERVER_URI}/users/login`,data)
     // console.log(res.status)
     // console.log("response le login se hu")
     

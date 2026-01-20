@@ -14,7 +14,7 @@ const ConfirmRidePopUp = (props) => {
         userId:props.confirmRideData?.user._id
     }
     
-    const res = await axios.get('http://localhost:5000/api/v1/ride/start-ride',{
+    const res = await axios.get(`${import.meta.VITE_SERVER_URI}/ride/start-ride`,{
       params:{
         rideId:data.rideId,
         userId:data.userId,

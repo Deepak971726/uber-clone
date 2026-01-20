@@ -35,7 +35,7 @@ const CaptainSignup = () => {
     } 
     
     
-    const res = await axios.post('http://localhost:5000/api/v1/captain/register',data)
+    const res = await axios.post(`${import.meta.VITE_SERVER_URI}/captain/register`,data)
     
     // console.log(res.status,res.data.token)
     // console.log(res.data)
