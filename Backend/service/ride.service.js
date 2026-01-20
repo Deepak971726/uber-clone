@@ -149,6 +149,7 @@ const startRideService = async({rideId, userId, captain, otp})=>{
     }, {
         status: 'ongoing'
     })
+    // console.log(ride)
 
     return ride;
     

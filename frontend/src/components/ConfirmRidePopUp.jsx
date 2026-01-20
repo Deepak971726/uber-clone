@@ -24,8 +24,12 @@ const ConfirmRidePopUp = (props) => {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
     })
-    // console.log("ride starred",res)
-    navigate('/captain-riding')
+    console.log("ride starred and this is response from server",res)
+    navigate('/captain-riding',{
+        state:{
+            ride:res.data.ride
+        }
+    })
     
     // console.log(data,otp)
     // console.log(res)

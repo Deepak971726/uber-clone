@@ -50,6 +50,7 @@ const authUser= async(req,res,next)=>{
 
 
 const authCaptain= async(req,res,next)=>{
+    // console.log("authcaptain")
     
     const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
     

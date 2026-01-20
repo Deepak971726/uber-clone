@@ -8,9 +8,10 @@ import ConfirmRide from '../components/ConfirmRide'
 import LookingForDriver from '../components/LookingForDriver'
 import WaitingForDriver from '../components/WaitingForDriver'
 import axios from 'axios'
-import { Await, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useUserData } from '../context/UserContext'
 import { useSocket } from '../context/SocketContext'
+import LiveTracking from '../components/LiveTracking'
 
 const Home = () => {
   
@@ -69,7 +70,12 @@ const Home = () => {
     // setRide(data)
     console.log("ride started data::::",data)
     // navigate = useNavigate()
-    navigate('/riding')
+     navigate('/riding',{
+        state:{
+            ride:data
+        }
+    })
+    
   },[])
   
   
@@ -223,7 +229,8 @@ const Home = () => {
       <img  className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"/>
       
       <div className='h-screen w-screen'>
-        <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"/>
+        {/* <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"/> */}
+        <LiveTracking/>
       </div>
       <div className='flex flex-col justify-end h-screen absolute top-0 w-full'>
         <div className='h-[30%] bg-white  relative p-6'>
@@ -285,7 +292,7 @@ const Home = () => {
         <LookingForDriver vehicleType={vehicleType} destination={destination} pickup={pickup} fare={fare} setVehicleFound={setVehicleFound}/>
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0  translate-y-full bg-white px-3 py-6 pt-1'>
-        <WaitingForDriver ride = {ride} />
+        <WaitingForDriver ride = {ride} setWaitingForDriver={setWaitingForDriver}/>
       </div>
       
     </div>

@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import {body, query} from 'express-validator' 
 import {authCaptain, authUser} from '../midllerwares/auth.middlerware.js'
-import { confirmRide, createRide, getFare, startRide } from '../controllers/ride.controller.js'
+import { confirmRide, createRide, endRide, getFare, startRide } from '../controllers/ride.controller.js'
 
 
 
@@ -31,6 +31,10 @@ router.get('/start-ride',authCaptain,
     query('userId').isMongoId().withMessage('Invalid user id'),
     query('otp').isLength({ min: 6 }).withMessage('Invalid otp address'),
     startRide
+)
+router.post('/end-ride',authCaptain,
+    body('rideId').isMongoId().withMessage('Invalid ride id'),
+    endRide
 )
 
 

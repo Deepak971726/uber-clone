@@ -1,29 +1,33 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 
 const FinishRide = (props) => {
 
     const navigate = useNavigate()
 
-    // async function endRide() {
-    //     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/end-ride`, {
+    const endRide=async()=> {
+        // console.log("request bhej di",props.ride._id)
+        
+        const response = await axios.post('http://localhost:5000/api/v1/ride/end-ride', {
 
-    //         rideId: props.ride._id
+            rideId: props.ride._id
 
 
-    //     }, {
-    //         headers: {
-    //             Authorization: `Bearer ${localStorage.getItem('token')}`
-    //         }
-    //     })
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        console.log(response)
 
-    //     if (response.status === 200) {
-    //         navigate('/captain-home')
-    //     }
+        if (response.status === 200) {
+            navigate('/captain-home')
+        }
 
-    // }
+    }
 
     return (
         <div>
@@ -34,9 +38,9 @@ const FinishRide = (props) => {
             <div className='flex items-center justify-between p-4 border-2 border-yellow-400 rounded-lg mt-4'>
                 <div className='flex items-center gap-3 '>
                     <img className='h-12 rounded-full object-cover w-12' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" alt="" />
-                    <h2 className='text-lg font-medium'>rider Name</h2>
+                    <h2 className='text-lg font-medium capitalize'>{props.ride?.user.fullName.firstName+" "+props.ride?.user.fullName.lastName}</h2>
                 </div>
-                <h5 className='text-lg font-semibold'>2.2 KM</h5>
+                <h5 className='text-lg font-semibold'>{props.ride?.distance} KM</h5>
             </div>
             <div className='flex gap-2 justify-between flex-col items-center'>
                 <div className='w-full mt-5'>
@@ -44,20 +48,20 @@ const FinishRide = (props) => {
                         <i className="ri-map-pin-user-fill"></i>
                         <div>
                             <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>pick location</p>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 border-gray-300 border-b-2'>
                         <i className="text-lg ri-map-pin-2-fill"></i>
                         <div>
                             <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>destination loation</p>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.destination}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3'>
                         <i className="ri-currency-line"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>₹222.22 </h3>
+                            <h3 className='text-lg font-medium'>₹{props.ride?.fare} </h3>
                             <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
                         </div>
                     </div>
@@ -66,7 +70,7 @@ const FinishRide = (props) => {
                 <div className='mt-10 w-full'>
 
                     <button
-                        // onClick={endRide}
+                        onClick={endRide}
                         className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Finish Ride</button>
                 </div>
             </div>

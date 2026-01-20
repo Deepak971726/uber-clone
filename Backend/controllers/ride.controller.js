@@ -144,10 +144,10 @@ const startRide = async(req,res)=>{
     try {
         
         const {rideId, userId, otp} = req.query
-        console.log(rideId,userId,otp)
+        // console.log(rideId,userId,otp)
         
         const ride = await startRideService({rideId, userId, otp, captain:req.captain})
-        console.log(ride)
+        // console.log(ride)
         
         if(!ride){
             return res.status(401).json({
@@ -159,7 +159,7 @@ const startRide = async(req,res)=>{
             ride,
             message:"ride stared successfully !!"
         })
-        
+        // console.log("ride started",ride)
          sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-started',
             data: ride
@@ -172,5 +172,46 @@ const startRide = async(req,res)=>{
     
     }
 }
+
+const endRide = async(req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    
+    const {rideId} = req.body
+        // console.log("end ride id",rideId)
+    
+     try {
+        const ride = await rideModel.findByIdAndUpdate(rideId,
+            {
+                $set:{
+                    status:"completed"
+                }
+            },
+            {
+                new:true
+            }
+            
+        ).populate('user').populate('captain')
+        
+        // if(req.captain._id.toString() !== ride.captain.toString()){
+        //     return res.status(401).json({
+        //         message:"unauthorized user"
+        //     })
+        // }
+        // console.log("ride data",ride)
+        
+        return res.status(200).json({
+            ride,
+            message:"ride completed successfully"
+        })
+        
+        
+     } catch (error) {
+         console.log(err);
+        return res.status(500).json({ message: err.message });
+     }
+}
  
- export {createRide, getFare, confirmRide, startRide}
+ export {createRide, getFare, confirmRide, startRide,endRide}
